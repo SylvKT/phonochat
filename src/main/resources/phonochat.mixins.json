@@ -1,12 +1,16 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "gay.sylv.phonochat.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [
-	"Mixin_ServerPlayerEntity"
-  ],
-  "injectors": {
-	"defaultRequire": 1
-  }
+	"required": true,
+	"minVersion": "0.8",
+	"package": "gay.sylv.phonochat.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"Mixin_ServerPlayerEntity"
+	],
+	"client": [
+		"client.Mixin_MouseHandler",
+		"client.Mixin_RadioLoudspeakerBlockEntity"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

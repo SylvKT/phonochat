@@ -15,12 +15,15 @@
 	"icon": "assets/phonochat/icon.png",
 	"environment": "*",
 	"entrypoints": {
-	"main": [
-		"gay.sylv.phonochat.PhonochatMod"
-	],
-	"voicechat": [
-		"gay.sylv.phonochat.plugin.PhonochatVoicechatPlugin"
-	]
+		"main": [
+			"gay.sylv.phonochat.PhonochatMod"
+		],
+		"client": [
+			"gay.sylv.phonochat.client.PhonochatClient"
+		],
+		"voicechat": [
+			"gay.sylv.phonochat.plugin.PhonochatVoicechatPlugin"
+		]
 	},
 	"mixins": [
 		"phonochat.mixins.json"
