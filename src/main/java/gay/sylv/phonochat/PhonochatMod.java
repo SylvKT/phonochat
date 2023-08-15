@@ -9,7 +9,7 @@ public class PhonochatMod implements ModInitializer {
 	public static final String MOD_ID = "phonochat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final double CHAT_RADIUS = 16;
-	public static final boolean HEAR_SELF = true;
+	public static final boolean HEAR_SELF = false;
 
 	@Override
 	public void onInitialize() {
