@@ -8,6 +8,7 @@
 	],
 	"client": [
 		"client.Mixin_MouseHandler",
+		"client.Mixin_PlayerInventory",
 		"client.Mixin_RadioLoudspeakerBlockEntity"
 	],
 	"injectors": {

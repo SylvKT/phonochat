@@ -10,6 +10,8 @@ public class Mixin_ServerPlayerEntity implements Duck_ServerPlayerEntity {
 	@Unique
 	private int broadcastingChannel;
 	
+	private Mixin_ServerPlayerEntity() {}
+	
 	@Override
 	public int phonochat$getBroadcastingChannel() {
 		return broadcastingChannel;

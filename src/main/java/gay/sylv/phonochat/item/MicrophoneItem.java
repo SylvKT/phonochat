@@ -20,7 +20,11 @@ public class MicrophoneItem extends TrinketItem {
 		if (!(entity instanceof PlayerEntity player)) return;
 		if (entity.getWorld().isClient) return;
 		
-		int channel = stack.getOrCreateNbt().getInt("channel");
+		int channel = 0;
+		//noinspection DataFlowIssue
+		if (stack.hasNbt() && stack.getNbt().contains("channel")) {
+			channel = stack.getNbt().getInt("channel");
+		}
 		((Duck_ServerPlayerEntity) player).phonochat$setBroadcastingChannel(channel);
 		BROADCASTING_CHANNELS.put(channel, BROADCASTING_CHANNELS.get(channel) + 1);
 	}

@@ -2,14 +2,9 @@ package gay.sylv.phonochat.mixin.client;
 
 import gay.sylv.phonochat.PhonochatMod;
 import gay.sylv.phonochat.client.PhonochatClient;
-import gay.sylv.phonochat.network.c2s.C2SPackets;
-import gay.sylv.phonochat.network.c2s.ListeningToC2SPacket;
-import gay.sylv.phonochat.network.c2s.NotListeningC2SPacket;
 import io.github.foundationgames.phonos.block.entity.RadioLoudspeakerBlockEntity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -22,6 +17,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static gay.sylv.phonochat.client.PhonochatClient.HEADPHONES_CHANNELS;
+import static gay.sylv.phonochat.plugin.PhonochatVoicechatPlugin.sendListeningTo;
+import static gay.sylv.phonochat.plugin.PhonochatVoicechatPlugin.sendNotListening;
 
 @Mixin(value = RadioLoudspeakerBlockEntity.class, remap = false)
 public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
@@ -47,7 +46,9 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 			if (channelPosList.size() == 0) {
 //				PhonochatClient.LOGGER.info("channel entry list " + this.channel + " empty, removing");
 				PhonochatClient.LISTENING_CHANNELS.remove(this.channel);
-				sendNotListening(this.channel);
+				if (!HEADPHONES_CHANNELS.containsKey(this.channel)) {
+					sendNotListening(this.channel);
+				}
 			}
 		}
 	}
@@ -65,7 +66,9 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 				if (channelPosList.size() == 0) {
 //					PhonochatClient.LOGGER.info("channel entry list " + this.oldChannel + " empty, removing");
 					PhonochatClient.LISTENING_CHANNELS.remove(this.oldChannel);
-					sendNotListening(this.oldChannel);
+					if (!HEADPHONES_CHANNELS.containsKey(this.oldChannel)) {
+						sendNotListening(this.oldChannel);
+					}
 				}
 			}
 		}
@@ -77,7 +80,9 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 			if (!PhonochatClient.LISTENING_CHANNELS.containsKey(this.channel)) {
 //				PhonochatClient.LOGGER.info("channel entry doesn't exist, creating one for channel " + this.channel);
 				PhonochatClient.LISTENING_CHANNELS.put(this.channel, ObjectArrayList.of(pos));
-				sendListeningTo(this.channel);
+				if (!HEADPHONES_CHANNELS.containsKey(this.channel)) {
+					sendListeningTo(this.channel);
+				}
 			} else if (!PhonochatClient.LISTENING_CHANNELS.get(this.channel).contains(pos)) {
 //				PhonochatClient.LOGGER.info("adding channel " + this.channel + " at " + pos);
 				ObjectList<BlockPos> channelPosList = PhonochatClient.LISTENING_CHANNELS.get(this.channel);
@@ -91,26 +96,12 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 				if (channelPosList.size() == 0) {
 //					PhonochatClient.LOGGER.info("channel entry list " + this.channel + " empty, removing");
 					PhonochatClient.LISTENING_CHANNELS.remove(this.channel);
-					sendNotListening(this.channel);
+					if (!HEADPHONES_CHANNELS.containsKey(this.channel)) {
+						sendNotListening(this.channel);
+					}
 				}
 			}
 		}
-	}
-	
-	@Unique
-	private void sendListeningTo(int channel) {
-		var buf = PacketByteBufs.create();
-		var packet = new ListeningToC2SPacket(channel);
-		packet.write(buf);
-		ClientPlayNetworking.send(C2SPackets.LISTENING_TO, buf);
-	}
-	
-	@Unique
-	private void sendNotListening(int channel) {
-		var buf = PacketByteBufs.create();
-		var packet = new NotListeningC2SPacket(channel);
-		packet.write(buf);
-		ClientPlayNetworking.send(C2SPackets.NOT_LISTENING, buf);
 	}
 	
 	// END SPAGHETTI

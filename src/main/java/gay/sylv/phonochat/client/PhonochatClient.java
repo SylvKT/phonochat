@@ -2,6 +2,7 @@ package gay.sylv.phonochat.client;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -16,6 +17,10 @@ import static gay.sylv.phonochat.PhonochatMod.MOD_ID;
 public class PhonochatClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID + "/Client");
 	public static final Int2ObjectMap<ObjectList<BlockPos>> LISTENING_CHANNELS = new Int2ObjectArrayMap<>();
+	/**
+	 * A map of channels listened to slots in the player's inventory
+	 */
+	public static final Int2ObjectMap<IntList> HEADPHONES_CHANNELS = new Int2ObjectArrayMap<>();
 	
 	@Override
 	public void onInitializeClient() {
