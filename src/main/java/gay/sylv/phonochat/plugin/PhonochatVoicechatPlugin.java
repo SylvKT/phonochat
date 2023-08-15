@@ -67,7 +67,7 @@ public class PhonochatVoicechatPlugin implements VoicechatPlugin {
 		VoicechatServerApi api = event.getVoicechat();
 		for (UUID uuid : LISTENING_PLAYERS.keySet()) {
 			IntList channels = LISTENING_PLAYERS.get(uuid);
-			if (channels.contains(broadcastingChannel)) {
+			if (channels.contains(broadcastingChannel) && !uuid.equals(event.getSenderConnection().getPlayer().getUuid())) {
 				api.sendStaticSoundPacketTo(api.getConnectionOf(uuid), event.getPacket().staticSoundPacketBuilder().build());
 			}
 		}
