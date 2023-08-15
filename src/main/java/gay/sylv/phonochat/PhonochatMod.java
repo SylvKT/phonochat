@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 public class PhonochatMod implements ModInitializer {
 	public static final String MOD_ID = "phonochat";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final double CHAT_RADIUS = 16;
 
 	@Override
 	public void onInitialize() {

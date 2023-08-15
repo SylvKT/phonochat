@@ -1,5 +1,6 @@
 package gay.sylv.phonochat.mixin.client;
 
+import gay.sylv.phonochat.PhonochatMod;
 import gay.sylv.phonochat.client.PhonochatClient;
 import gay.sylv.phonochat.network.c2s.C2SPackets;
 import gay.sylv.phonochat.network.c2s.ListeningToC2SPacket;
@@ -46,6 +47,7 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 			if (channelPosList.size() == 0) {
 //				PhonochatClient.LOGGER.info("channel entry list " + this.channel + " empty, removing");
 				PhonochatClient.LISTENING_CHANNELS.remove(this.channel);
+				sendNotListening(this.channel);
 			}
 		}
 	}
@@ -63,6 +65,7 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 				if (channelPosList.size() == 0) {
 //					PhonochatClient.LOGGER.info("channel entry list " + this.oldChannel + " empty, removing");
 					PhonochatClient.LISTENING_CHANNELS.remove(this.oldChannel);
+					sendNotListening(this.oldChannel);
 				}
 			}
 		}
@@ -70,14 +73,11 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 		
 		var client = MinecraftClient.getInstance();
 		assert client.player != null;
-		if (client.player.getPos().isInRange(pos.toCenterPos(), 8)) {
+		if (client.player.getPos().isInRange(pos.toCenterPos(), PhonochatMod.CHAT_RADIUS)) {
 			if (!PhonochatClient.LISTENING_CHANNELS.containsKey(this.channel)) {
 //				PhonochatClient.LOGGER.info("channel entry doesn't exist, creating one for channel " + this.channel);
 				PhonochatClient.LISTENING_CHANNELS.put(this.channel, ObjectArrayList.of(pos));
-				var buf = PacketByteBufs.create();
-				var packet = new ListeningToC2SPacket(this.channel);
-				packet.write(buf);
-				ClientPlayNetworking.send(C2SPackets.LISTENING_TO, buf);
+				sendListeningTo(this.channel);
 			} else if (!PhonochatClient.LISTENING_CHANNELS.get(this.channel).contains(pos)) {
 //				PhonochatClient.LOGGER.info("adding channel " + this.channel + " at " + pos);
 				ObjectList<BlockPos> channelPosList = PhonochatClient.LISTENING_CHANNELS.get(this.channel);
@@ -91,14 +91,26 @@ public class Mixin_RadioLoudspeakerBlockEntity extends BlockEntity {
 				if (channelPosList.size() == 0) {
 //					PhonochatClient.LOGGER.info("channel entry list " + this.channel + " empty, removing");
 					PhonochatClient.LISTENING_CHANNELS.remove(this.channel);
+					sendNotListening(this.channel);
 				}
-				
-				var buf = PacketByteBufs.create();
-				var packet = new NotListeningC2SPacket(this.channel);
-				packet.write(buf);
-				ClientPlayNetworking.send(C2SPackets.NOT_LISTENING, buf);
 			}
 		}
+	}
+	
+	@Unique
+	private void sendListeningTo(int channel) {
+		var buf = PacketByteBufs.create();
+		var packet = new ListeningToC2SPacket(channel);
+		packet.write(buf);
+		ClientPlayNetworking.send(C2SPackets.LISTENING_TO, buf);
+	}
+	
+	@Unique
+	private void sendNotListening(int channel) {
+		var buf = PacketByteBufs.create();
+		var packet = new NotListeningC2SPacket(channel);
+		packet.write(buf);
+		ClientPlayNetworking.send(C2SPackets.NOT_LISTENING, buf);
 	}
 	
 	// END SPAGHETTI
