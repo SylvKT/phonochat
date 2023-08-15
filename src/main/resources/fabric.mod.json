@@ -3,7 +3,7 @@
 	"id": "phonochat",
 	"version": "${version}",
 	"name": "Phonochat",
-	"description": "A basic Phonos / Simple Voice Chat integration mod.",
+	"description": "A basic Phonos / Simple Voice Chat integration mod. Adds the microphone item which allows you to broadcast your voice to a speaker.",
 	"authors": [
 		"Sylv"
 	],
