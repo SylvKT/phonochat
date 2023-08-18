@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 
 import static gay.sylv.phonochat.PhonochatMod.MOD_ID;
 
-public class ItemGroups implements Initializable {
+public final class ItemGroups implements Initializable {
 	static final ItemGroups INSTANCE = new ItemGroups();
 	
 	public static final ItemGroup PHONOCHAT = FabricItemGroup.builder()

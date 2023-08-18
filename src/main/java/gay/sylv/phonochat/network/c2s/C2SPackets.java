@@ -55,9 +55,11 @@ public final class C2SPackets implements Initializable {
 			int channel = buf.readInt();
 			IntList channels = PhonochatVoicechatPlugin.LISTENING_PLAYERS.get(player.getUuid());
 			
-			channels.removeInt(channels.indexOf(channel));
-			if (channels.size() == 0) {
-				PhonochatVoicechatPlugin.LISTENING_PLAYERS.remove(player.getUuid());
+			if (channels != null) {
+				channels.removeInt(channels.indexOf(channel));
+				if (channels.size() == 0) {
+					PhonochatVoicechatPlugin.LISTENING_PLAYERS.remove(player.getUuid());
+				}
 			}
 		}));
 	}
