@@ -11,8 +11,6 @@ import gay.sylv.phonochat.duck.Duck_ServerPlayerEntity;
 import gay.sylv.phonochat.network.c2s.C2SPackets;
 import gay.sylv.phonochat.network.c2s.ListeningToC2SPacket;
 import gay.sylv.phonochat.network.c2s.NotListeningC2SPacket;
-import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -27,10 +25,6 @@ public class PhonochatVoicechatPlugin implements VoicechatPlugin {
 	 * Map of every listening player to their listening channels.
 	 */
 	public static final Object2ObjectMap<UUID, IntList> LISTENING_PLAYERS = new Object2ObjectOpenHashMap<>();
-	/**
-	 * Map of each channel that is broadcasting to the amount of broadcasting channels.
-	 */
-	public static final Int2IntMap BROADCASTING_CHANNELS = new Int2IntArrayMap();
 	
 	/**
 	 * @return the unique ID for this voice chat plugin

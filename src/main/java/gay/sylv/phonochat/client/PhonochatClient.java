@@ -21,6 +21,10 @@ public class PhonochatClient implements ClientModInitializer {
 	 * A map of channels listened to slots in the player's inventory
 	 */
 	public static final Int2ObjectMap<IntList> HEADPHONES_CHANNELS = new Int2ObjectArrayMap<>();
+	/**
+	 * If the player is wearing headphones.
+	 */
+	public static boolean hasHeadphones = false;
 	
 	@Override
 	public void onInitializeClient() {

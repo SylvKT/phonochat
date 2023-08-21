@@ -1,7 +1,11 @@
 package gay.sylv.phonochat.network.c2s;
 
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketComponent;
+import dev.emi.trinkets.api.TrinketsApi;
 import gay.sylv.phonochat.Initializable;
 import gay.sylv.phonochat.Items;
+import gay.sylv.phonochat.duck.Duck_ServerPlayerEntity;
 import gay.sylv.phonochat.plugin.PhonochatVoicechatPlugin;
 import io.github.foundationgames.phonos.radio.RadioStorage;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -12,6 +16,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
+
+import java.util.Optional;
 
 import static gay.sylv.phonochat.PhonochatMod.MOD_ID;
 
@@ -23,6 +30,8 @@ public final class C2SPackets implements Initializable {
 	public static final Identifier SHIFT_SCROLL = new Identifier(MOD_ID, "shift_scroll");
 	public static final Identifier LISTENING_TO = new Identifier(MOD_ID, "listening_to");
 	public static final Identifier NOT_LISTENING = new Identifier(MOD_ID, "not_listening");
+	public static final Identifier UNEQUIP_MIC = new Identifier(MOD_ID, "unequip_mic");
+	public static final Identifier EQUIP_MIC = new Identifier(MOD_ID, "equip_mic");
 	
 	private C2SPackets() {}
 	
@@ -51,7 +60,7 @@ public final class C2SPackets implements Initializable {
 				PhonochatVoicechatPlugin.LISTENING_PLAYERS.get(player.getUuid()).add(channel);
 			}
 		}));
-		ServerPlayNetworking.registerGlobalReceiver(NOT_LISTENING, ((server, player, handler, buf, packetSender) -> {
+		ServerPlayNetworking.registerGlobalReceiver(NOT_LISTENING, (server, player, handler, buf, packetSender) -> {
 			int channel = buf.readInt();
 			IntList channels = PhonochatVoicechatPlugin.LISTENING_PLAYERS.get(player.getUuid());
 			
@@ -61,7 +70,23 @@ public final class C2SPackets implements Initializable {
 					PhonochatVoicechatPlugin.LISTENING_PLAYERS.remove(player.getUuid());
 				}
 			}
-		}));
+		});
+		ServerPlayNetworking.registerGlobalReceiver(UNEQUIP_MIC, (server, player, handler, buf, responseSender) -> ((Duck_ServerPlayerEntity) player).phonochat$setBroadcastingChannel(-1));
+		ServerPlayNetworking.registerGlobalReceiver(EQUIP_MIC, (server, player, handler, buf, responseSender) -> {
+			Optional<TrinketComponent> trinketComponent = TrinketsApi.getTrinketComponent(player);
+			if (trinketComponent.isEmpty()) return;
+			ItemStack stack = null;
+			for (Pair<SlotReference, ItemStack> slotId : trinketComponent.get().getEquipped(Items.MICROPHONE)) {
+				stack = slotId.getRight();
+			}
+			int channel = 0;
+			if (stack == null) return;
+			//noinspection DataFlowIssue
+			if (stack.hasNbt() && stack.getNbt().contains("channel")) {
+				channel = stack.getNbt().getInt("channel");
+			}
+			((Duck_ServerPlayerEntity) player).phonochat$setBroadcastingChannel(channel);
+		});
 	}
 	
 	private static void sendMicrophoneOverlay(ServerPlayerEntity player, int channel) {
