@@ -1,4 +1,4 @@
-package gay.sylv.phonochat.mixin;
+package gay.sylv.phonochat.mixin.client;
 
 import gay.sylv.phonochat.event.handler.PortableRadioHandler;
 import io.github.foundationgames.phonos.item.PhonosItems;
