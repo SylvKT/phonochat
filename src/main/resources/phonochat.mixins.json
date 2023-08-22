@@ -4,11 +4,11 @@
 	"package": "gay.sylv.phonochat.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"Mixin_PlayerInventory",
 		"Mixin_ServerPlayerEntity"
 	],
 	"client": [
 		"client.Mixin_MouseHandler",
+		"client.Mixin_PlayerInventory",
 		"client.Mixin_RadioLoudspeakerBlockEntity"
 	],
 	"injectors": {
