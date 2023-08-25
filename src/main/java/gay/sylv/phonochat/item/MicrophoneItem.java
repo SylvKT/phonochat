@@ -25,7 +25,7 @@ public class MicrophoneItem extends TrinketItem {
 		if (!entity.getWorld().isClient) { // if we're on the server
 			if (player instanceof ServerPlayerEntity serverPlayer && !serverPlayer.interactionManager.getGameMode().isCreative()) { // if this player isn't in creative
 				// we won't have any syncing issues, so go ahead and do things normally
-				int channel = 28;
+				int channel = 0;
 				//noinspection DataFlowIssue
 				if (stack.hasNbt() && stack.getNbt().contains("channel")) {
 					channel = stack.getNbt().getInt("channel");
