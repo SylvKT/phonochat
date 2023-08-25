@@ -25,14 +25,15 @@ public class MicrophoneItem extends TrinketItem {
 		if (!entity.getWorld().isClient) { // if we're on the server
 			if (player instanceof ServerPlayerEntity serverPlayer && !serverPlayer.interactionManager.getGameMode().isCreative()) { // if this player isn't in creative
 				// we won't have any syncing issues, so go ahead and do things normally
-				int channel = 0;
+				int channel = 28;
 				//noinspection DataFlowIssue
 				if (stack.hasNbt() && stack.getNbt().contains("channel")) {
 					channel = stack.getNbt().getInt("channel");
 				}
 				((Duck_ServerPlayerEntity) player).phonochat$setBroadcastingChannel(channel);
 			}
-		} else {ClientPlayerInteractionManager interactionManager = MinecraftClient.getInstance().interactionManager;
+		} else {
+			ClientPlayerInteractionManager interactionManager = MinecraftClient.getInstance().interactionManager;
 			if (interactionManager != null && interactionManager.getCurrentGameMode().isCreative()) {
 				// if we're in creative, proceed to sync the microphone state
 				ClientPlayNetworking.send(C2SPackets.EQUIP_MIC, PacketByteBufs.empty());

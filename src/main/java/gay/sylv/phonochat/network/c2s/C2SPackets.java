@@ -66,7 +66,7 @@ public final class C2SPackets implements Initializable {
 			
 			if (channels != null) {
 				channels.removeInt(channels.indexOf(channel));
-				if (channels.size() == 0) {
+				if (channels.isEmpty()) {
 					PhonochatVoicechatPlugin.LISTENING_PLAYERS.remove(player.getUuid());
 				}
 			}
@@ -79,7 +79,7 @@ public final class C2SPackets implements Initializable {
 			for (Pair<SlotReference, ItemStack> slotId : trinketComponent.get().getEquipped(Items.MICROPHONE)) {
 				stack = slotId.getRight();
 			}
-			int channel = 0;
+			int channel = 28;
 			if (stack == null) return;
 			//noinspection DataFlowIssue
 			if (stack.hasNbt() && stack.getNbt().contains("channel")) {

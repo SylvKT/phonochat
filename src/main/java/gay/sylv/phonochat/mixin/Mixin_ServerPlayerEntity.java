@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(ServerPlayerEntity.class)
 public class Mixin_ServerPlayerEntity implements Duck_ServerPlayerEntity {
 	@Unique
-	private int broadcastingChannel;
+	private int broadcastingChannel = -1;
 	
 	private Mixin_ServerPlayerEntity() {}
 	
